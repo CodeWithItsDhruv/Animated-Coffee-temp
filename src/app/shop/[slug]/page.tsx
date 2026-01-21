@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useApp, Product } from "@/context/AppContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import NextImage from "next/image";
 import { ShoppingBag, ArrowLeft, Star, Coffee, Truck, ShieldCheck } from "lucide-react";
 
 export default function ProductPage() {
@@ -51,7 +50,7 @@ export default function ProductPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24">
                     {/* Product Image */}
                     <div className="relative aspect-[4/5] bg-neutral-900 rounded-sm overflow-hidden">
-                        <Image
+                        <NextImage
                             src={product.image}
                             alt={product.name}
                             fill

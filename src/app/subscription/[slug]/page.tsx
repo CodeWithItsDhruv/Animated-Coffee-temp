@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import Image from "next/image";
+import NextImage from "next/image";
 import { ArrowLeft, Check, Calendar, Package, Gift, CreditCard, Star } from "lucide-react";
 
 // Define Plan Data
@@ -105,7 +105,7 @@ export default function SubscriptionDetail() {
                     {/* Visual Side */}
                     <div className="relative">
                         <div className="aspect-square bg-neutral-900 rounded-sm overflow-hidden mb-8 relative group">
-                            <Image
+                            <NextImage
                                 src={plan.image}
                                 alt={plan.name}
                                 fill

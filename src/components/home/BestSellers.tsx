@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import NextImage from "next/image";
 import { Plus } from "lucide-react";
 
 // Placeholder data - in a real app this comes from a CMS/API
@@ -45,7 +45,7 @@ export default function BestSellers() {
                     {products.map((p) => (
                         <div key={p.id} className="group relative">
                             <div className="aspect-[4/5] bg-neutral-900 w-full relative overflow-hidden mb-6">
-                                <Image
+                                <NextImage
                                     src={p.image}
                                     alt={p.name}
                                     fill

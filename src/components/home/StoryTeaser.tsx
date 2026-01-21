@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import NextImage from "next/image";
 import { ArrowRight } from "lucide-react";
 
 export default function StoryTeaser() {
@@ -26,10 +26,10 @@ export default function StoryTeaser() {
                 {/* Visual - Using CSS grid for an "architectural" image layout since we don't have assets yet */}
                 <div className="order-1 lg:order-2 grid grid-cols-2 gap-4">
                     <div className="bg-neutral-900 aspect-[3/4] rounded-sm overflow-hidden relative">
-                        <Image src="/images/story-origin.png" alt="Origin" fill className="object-cover opacity-80" sizes="(max-width: 1024px) 50vw, 25vw" />
+                        <NextImage src="/images/story-origin.png" alt="Origin" fill className="object-cover opacity-80" sizes="(max-width: 1024px) 50vw, 25vw" />
                     </div>
                     <div className="bg-neutral-800 aspect-[3/4] rounded-sm overflow-hidden relative mt-12">
-                        <Image src="/images/story-roasting.png" alt="Process" fill className="object-cover opacity-80" sizes="(max-width: 1024px) 50vw, 25vw" />
+                        <NextImage src="/images/story-roasting.png" alt="Process" fill className="object-cover opacity-80" sizes="(max-width: 1024px) 50vw, 25vw" />
                     </div>
                 </div>
             </div>
