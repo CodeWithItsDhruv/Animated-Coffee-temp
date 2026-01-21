@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Plus } from "lucide-react";
 
 // Placeholder data - in a real app this comes from a CMS/API
@@ -44,10 +45,12 @@ export default function BestSellers() {
                     {products.map((p) => (
                         <div key={p.id} className="group relative">
                             <div className="aspect-[4/5] bg-neutral-900 w-full relative overflow-hidden mb-6">
-                                <img
+                                <Image
                                     src={p.image}
                                     alt={p.name}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                    fill
+                                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                    sizes="(max-width: 768px) 100vw, 33vw"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-end p-6">
                                     <button className="w-full bg-white text-black py-4 font-bold uppercase text-xs tracking-widest hover:bg-gold transition-colors">

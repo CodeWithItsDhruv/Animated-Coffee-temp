@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Check, Calendar, Package, Gift, CreditCard, Star } from "lucide-react";
 
 // Define Plan Data
@@ -104,12 +105,14 @@ export default function SubscriptionDetail() {
                     {/* Visual Side */}
                     <div className="relative">
                         <div className="aspect-square bg-neutral-900 rounded-sm overflow-hidden mb-8 relative group">
-                            <img
+                            <Image
                                 src={plan.image}
                                 alt={plan.name}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                fill
+                                className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
-                            <div className="absolute inset-0 bg-black/10" />
+                            <div className="absolute inset-0 bg-black/10 z-10" />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -165,8 +168,8 @@ export default function SubscriptionDetail() {
                                             key={months}
                                             onClick={() => setGiftDuration(months)}
                                             className={`py-3 px-2 text-center text-sm font-bold border transition-colors ${giftDuration === months
-                                                    ? 'bg-gold text-black border-gold'
-                                                    : 'text-white border-white/20 hover:border-white'
+                                                ? 'bg-gold text-black border-gold'
+                                                : 'text-white border-white/20 hover:border-white'
                                                 }`}
                                         >
                                             {months} Months

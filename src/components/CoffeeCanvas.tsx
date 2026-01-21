@@ -8,7 +8,7 @@ const FRAME_COUNT = 192;
 export default function CoffeeCanvas() {
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [images, setImages] = useState<HTMLImageElement[]>([]);
+    const [images, setImages] = useState<(HTMLImageElement | null)[]>([]);
     const [isFullLoaded, setIsFullLoaded] = useState(false);
 
     // Keep a reference to the first image for immediate rendering
@@ -32,18 +32,19 @@ export default function CoffeeCanvas() {
         };
     }, []);
 
-    // 2. Background Load of All Frames
+    // 2. Chunked Background Load of Frames
     useEffect(() => {
-        const loadImages = async () => {
-            const loadedImages: HTMLImageElement[] = [];
-            const promises = [];
+        const loadedBuffer: (HTMLImageElement | null)[] = new Array(FRAME_COUNT).fill(null);
 
-            for (let i = 1; i <= FRAME_COUNT; i++) {
+        const loadBatch = async (start: number, end: number) => {
+            const promises = [];
+            for (let i = start; i <= end; i++) {
+                if (i > FRAME_COUNT) break;
                 const promise = new Promise<void>((resolve) => {
                     const img = new Image();
                     img.src = `/images/sequence/${i}.jpg`;
                     img.onload = () => {
-                        loadedImages[i - 1] = img;
+                        loadedBuffer[i - 1] = img;
                         resolve();
                     };
                     img.onerror = () => {
@@ -53,13 +54,28 @@ export default function CoffeeCanvas() {
                 });
                 promises.push(promise);
             }
-
             await Promise.all(promises);
-            setImages(loadedImages);
-            setIsFullLoaded(true);
+            // Update state with what we have so far
+            setImages([...(loadedBuffer as any)]);
         };
 
-        loadImages();
+        const initLoad = async () => {
+            // Priority 1: First 60 frames (Initial Interaction)
+            await loadBatch(1, 60);
+            setIsFullLoaded(true); // Mark as ready for interaction
+
+            // Priority 2: Middle section (Defer slightly)
+            setTimeout(async () => {
+                await loadBatch(61, 120);
+
+                // Priority 3: End section (Defer more)
+                setTimeout(async () => {
+                    await loadBatch(121, FRAME_COUNT);
+                }, 1000);
+            }, 1000);
+        };
+
+        initLoad();
     }, []);
 
     const renderFrame = (index: number) => {
@@ -69,9 +85,21 @@ export default function CoffeeCanvas() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        // If full sequence isn't loaded yet, try to use firstImageRef 
-        // effectively showing the static first frame until we are ready
-        let img = images.length > 0 ? images[Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(index) - 1))] : firstImageRef.current;
+        // Robust Retrieval: Try exact frame, then nearest previous frame, then first image
+        let targetIndex = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(index) - 1));
+        let img = images[targetIndex];
+
+        if (!img && images.length > 0) {
+            // Fallback to nearest previous loaded frame to prevent blinking
+            for (let i = targetIndex; i >= 0; i--) {
+                if (images[i]) {
+                    img = images[i];
+                    break;
+                }
+            }
+        }
+
+        if (!img) img = firstImageRef.current;
 
         if (!img) return;
 
